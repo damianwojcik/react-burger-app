@@ -80,28 +80,37 @@ class BurgerBuilder extends Component {
         this.setState({ purchasing: false })
     }
     purchaseContinueHandler = () => {
-        this.setState({ isLoading: true });
-        const order = {
-            ingredients: this.state.ingredients,
-            price: this.state.totalPrice,
-            customer: {
-                name: 'Dam Woj',
-                address: {
-                    street: 'TestStreet 1',
-                    zipCode: '12521',
-                    country: 'Poland'
-                },
-                email: 'damwoj@gmail.com'
-            },
-            deliveryMethod: 'fastest'
-        };
-        axios.post('/orders.json', order)
-            .then(response => {
-                this.setState({ isLoading: false, purchasing: false });
-            })
-            .catch(error => {
-                this.setState({ isLoading: false, purchasing: false });
-            });
+        // this.setState({ isLoading: true });
+        // const order = {
+        //     ingredients: this.state.ingredients,
+        //     price: this.state.totalPrice,
+        //     customer: {
+        //         name: 'Dam Woj',
+        //         address: {
+        //             street: 'TestStreet 1',
+        //             zipCode: '12521',
+        //             country: 'Poland'
+        //         },
+        //         email: 'damwoj@gmail.com'
+        //     },
+        //     deliveryMethod: 'fastest'
+        // };
+        // axios.post('/orders.json', order)
+        //     .then(response => {
+        //         this.setState({ isLoading: false, purchasing: false });
+        //     })
+        //     .catch(error => {
+        //         this.setState({ isLoading: false, purchasing: false });
+        //     });
+        const queryParams = [];
+        for (let i in this.state.ingredients) {
+            queryParams.push(encodeURIComponent(i) + '=' + encodeURIComponent(this.state.ingredients[i]));
+        }
+        const queryString = queryParams.join('&');
+        this.props.history.push({
+            pathname: '/checkout',
+            search: '?' + queryString
+        });
     }
     render () {
         const disabledInfo = {
