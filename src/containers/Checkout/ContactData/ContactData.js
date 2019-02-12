@@ -8,47 +8,45 @@ import Input from '../../../components/UI/Input/Input';
 export default class ContactData extends Component {
     state = {
         orderForm: {
-            customer: {
-                name: {
-                    elementType: 'input',
-                    elementConfig: {
-                        type: 'text',
-                        placeholder: 'Your Name'
-                    },
-                    value: ''
+            name: {
+                elementType: 'input',
+                elementConfig: {
+                    type: 'text',
+                    placeholder: 'Your Name'
                 },
-                street: {
-                    elementType: 'input',
-                    elementConfig: {
-                        type: 'text',
-                        placeholder: 'Street'
-                    },
-                    value: ''
+                value: ''
+            },
+            street: {
+                elementType: 'input',
+                elementConfig: {
+                    type: 'text',
+                    placeholder: 'Street'
                 },
-                zipCode: {
-                    elementType: 'input',
-                    elementConfig: {
-                        type: 'text',
-                        placeholder: 'ZIP Code'
-                    },
-                    value: ''
+                value: ''
+            },
+            zipCode: {
+                elementType: 'input',
+                elementConfig: {
+                    type: 'text',
+                    placeholder: 'ZIP Code'
                 },
-                country: {
-                    elementType: 'input',
-                    elementConfig: {
-                        type: 'text',
-                        placeholder: 'Country'
-                    },
-                    value: ''
+                value: ''
+            },
+            country: {
+                elementType: 'input',
+                elementConfig: {
+                    type: 'text',
+                    placeholder: 'Country'
                 },
-                email: {
-                    elementType: 'input',
-                    elementConfig: {
-                        type: 'email',
-                        placeholder: 'Your Email'
-                    },
-                    value: ''
+                value: ''
+            },
+            email: {
+                elementType: 'input',
+                elementConfig: {
+                    type: 'email',
+                    placeholder: 'Your E-Mail'
                 },
+                value: ''
             },
             deliveryMethod: {
                 elementType: 'select',
@@ -66,9 +64,14 @@ export default class ContactData extends Component {
     orderHandler = (event) => {
         event.preventDefault();
         this.setState({ isLoading: true });
+        const formData = {};
+        for (let formElementIdentifier in this.state.orderForm) {
+            formData[formElementIdentifier] = this.state.orderForm[formElementIdentifier].value;
+        }
         const order = {
             ingredients: this.props.ingredients,
-            price: this.props.price
+            price: this.props.price,
+            orderData: formData
         };
         axios.post('/orders.json', order)
             .then(response => {
@@ -79,6 +82,17 @@ export default class ContactData extends Component {
                 this.setState({ isLoading: false });
             });
     }
+    inputChangedHandler = (event, inputIdentifier) => {
+        const updatedOrderForm = {
+            ...this.state.orderForm
+        };
+        const updatedFormElement = {
+            ...updatedOrderForm[inputIdentifier]
+        };
+        updatedFormElement.value = event.target.value;
+        updatedOrderForm[inputIdentifier] = updatedFormElement;
+        this.setState({ orderForm: updatedOrderForm })
+    }
     render() {
         const formElementsArray = [];
         for (let key in this.state.orderForm) {
@@ -88,20 +102,19 @@ export default class ContactData extends Component {
             })
         }
         let form = (
-            <form>
-                <Input elementType="" elementConfig="" value="" inputtype="input" type="text" name="name" placeholder="Your name" />
+            <form onSubmit={this.orderHandler}>
                 {formElementsArray.map(formElement => (
                     <Input
                         key={formElement.id}
                         elementType={formElement.config.elementType}
                         elementConfig={formElement.config.elementConfig}
                         value={formElement.config.value}
-                        onChange={() => console.log('he')} />
+                        changed={(event) => this.inputChangedHandler(event, formElement.id)} />
                 ))}
-                <Button btnType="Success" clicked={this.orderHandler}>ORDER</Button>
+                <Button btnType="Success">ORDER</Button>
             </form>
         );
-        if (this.state.loading) {
+        if (this.state.isLoading) {
             form = <Spinner />
         }
         return (
