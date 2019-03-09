@@ -11,11 +11,12 @@ class Orders extends Component {
     componentDidMount() {
         this.props.onFetchOrders();
     }
+
     render() {
         let orders = <Spinner />;
         if (!this.props.loading) {
             orders = this.props.orders.map(order => (
-                <Order key={order.id} ingredients={order.ingredients} price={+order.price} />
+                <Order key={order.id} ingredients={order.ingredients} price={order.price} />
             ));
         }
         return <div>{orders}</div>;
