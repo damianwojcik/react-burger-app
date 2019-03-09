@@ -1,4 +1,4 @@
-import * as actionTypes from '../actions/actionsTypes';
+import * as actionTypes from "../actions/actionsTypes";
 
 const initialState = {
     ingredients: null,
@@ -11,7 +11,7 @@ const INGREDIENT_PRICES = {
     cheese: 0.4,
     meat: 1.3,
     bacon: 0.7
-}
+};
 
 const reducer = (state = initialState, action) => {
     switch (action.type) {
@@ -20,18 +20,22 @@ const reducer = (state = initialState, action) => {
                 ...state,
                 ingredients: {
                     ...state.ingredients,
-                    [action.ingredientName]: state.ingredients[action.ingredientName] + 1
+                    [action.ingredientName]:
+                        state.ingredients[action.ingredientName] + 1
                 },
-                totalPrice: state.totalPrice + INGREDIENT_PRICES[action.ingredientName]
+                totalPrice:
+                    state.totalPrice + INGREDIENT_PRICES[action.ingredientName]
             };
         case actionTypes.REMOVE_INGREDIENT:
             return {
                 ...state,
                 ingredients: {
                     ...state.ingredients,
-                    [action.ingredientName]: state.ingredients[action.ingredientName] - 1
+                    [action.ingredientName]:
+                        state.ingredients[action.ingredientName] - 1
                 },
-                totalPrice: state.totalPrice - INGREDIENT_PRICES[action.ingredientName]
+                totalPrice:
+                    state.totalPrice - INGREDIENT_PRICES[action.ingredientName]
             };
         case actionTypes.SET_INGREDIENTS:
             return {
@@ -42,13 +46,14 @@ const reducer = (state = initialState, action) => {
                     cheese: action.ingredients.cheese,
                     meat: action.ingredients.meat
                 },
+                totalPrice: 4,
                 error: false
-            }
+            };
         case actionTypes.FETCH_INGREDIENTS_FAILED:
             return {
                 ...state,
                 error: true
-            }
+            };
         default:
             return state;
     }
