@@ -1,3 +1,12 @@
+.Layout {
+    max-width: 600px;
+    margin: auto;
+}
 .Content {
     margin-top: 72px;
+}
+@media (min-width: 600px) {
+    .Layout {
+        border: 1px solid #ddd;
+    }
 }
